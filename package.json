@@ -1,0 +1,19 @@
+{
+  "name": "runnablot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamiyaowl/runnablot.git"
+  },
+  "author": "kamiyaowl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kamiyaowl/runnablot/issues"
+  },
+  "homepage": "https://github.com/kamiyaowl/runnablot#readme"
+}
