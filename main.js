@@ -59,9 +59,29 @@ const generate = (sw,sh,cx,cy,ratio,iterLimit) => {
     return dst;
 };
 
-// とりあえず表示するだけ
-const print = (sw,sh,cx,cy,ratio,iterLimit) => {
-    const src = generate(sw,sh,cx,cy,ratio,iterLimit);
+/**
+ * 2次元配列の数値から値に勾配のある場所のみ残します
+ * @param {number[][]} src 2次元配列 
+ */
+const detectEdge = (src) => {
+    for (let j = 0 ; j < src.length ; j++) {
+        for (let i = 0 ; i < src[j].length ; i++) {
+            const isLeft   = (i > 0)                 && (src[j][i - 1] != src[j][i]);
+            const isRight  = (i < src[j].length - 1) && (src[j][i + 1] != src[j][i]);
+            const isTop    = (j > 0)                 && (src[j - 1][i] != src[i][i]);
+            const isBottom = (j < src.length - 1)    && (src[j + 1][i] != src[j][i]);
+            if (isLeft || isRight || isTop || isBottom) {
+                // todo here
+            }
+        }
+    }
+}
+
+/**
+ * 2次元配列の数値を、0123456789abcdefの文字列で表示します
+ * @param {number[][]} src 2次元配列 
+ */
+const print = (src) => {
     for (let j = 0 ; j < src.length ; j++) {
         let rowStr = "";
         for (let i = 0 ; i < src[j].length ; i++) {
@@ -79,4 +99,6 @@ const centerX = 0.0;
 const centerY = 0.0;
 const ratio = 2.5;
 const iterLimit = 100;
-print(screenWidth, screenHeight, centerX, centerY, ratio, iterLimit);
+
+const dst = generate(screenWidth,screenHeight,centerX,centerY,ratio,iterLimit);
+print(dst);
