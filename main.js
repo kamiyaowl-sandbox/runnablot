@@ -61,20 +61,36 @@ const generate = (sw,sh,cx,cy,ratio,iterLimit) => {
 
 /**
  * 2次元配列の数値から値に勾配のある場所のみ残します
- * @param {number[][]} src 2次元配列 
+ * @param {number[][]} src
  */
 const detectEdge = (src) => {
-    for (let j = 0 ; j < src.length ; j++) {
-        for (let i = 0 ; i < src[j].length ; i++) {
-            const isLeft   = (i > 0)                 && (src[j][i - 1] != src[j][i]);
-            const isRight  = (i < src[j].length - 1) && (src[j][i + 1] != src[j][i]);
-            const isTop    = (j > 0)                 && (src[j - 1][i] != src[i][i]);
-            const isBottom = (j < src.length - 1)    && (src[j + 1][i] != src[j][i]);
+    const dst = [];
+    const status = {
+        freeCount: 0,
+        edgeCount: 0,
+        dst: [],
+    };
+    
+    const width = src[0].length;
+    const height = src.length;
+    for (let j = 0 ; j < height ; j++) {
+        const row = [];
+        for (let i = 0 ; i < width ; i++) {
+            const isLeft   = (i > 0)           && (src[j][i - 1] != src[j][i]);
+            const isRight  = (i < width - 1)   && (src[j][i + 1] != src[j][i]);
+            const isTop    = (j > 0)           && (src[j - 1][i] != src[j][i]);
+            const isBottom = (j < height - 1)  && (src[j + 1][i] != src[j][i]);
             if (isLeft || isRight || isTop || isBottom) {
-                // todo here
+                row.push(src[j][i]);
+                status.edgeCount++;
+            } else {
+                row.push(0);
+                status.freeCount++;
             }
         }
+        status.dst.push(row);
     }
+    return status;
 }
 
 /**
@@ -85,7 +101,11 @@ const print = (src) => {
     for (let j = 0 ; j < src.length ; j++) {
         let rowStr = "";
         for (let i = 0 ; i < src[j].length ; i++) {
-            rowStr += (src[j][i] % 0x10).toString(16);
+            if (src[j][i] == 0) {
+                rowStr += " ";
+            } else {
+                rowStr += (src[j][i] % 0x10).toString(16);
+            }
         }
         console.log(rowStr);
     }
@@ -95,10 +115,15 @@ const print = (src) => {
 // 呼ぶ
 const screenWidth = 180;
 const screenHeight = 100;
-const centerX = 0.0;
+const centerX = -0.5;
 const centerY = 0.0;
-const ratio = 2.5;
+const ratio = 2.1;
 const iterLimit = 100;
 
-const dst = generate(screenWidth,screenHeight,centerX,centerY,ratio,iterLimit);
-print(dst);
+//TODO: パフォーマンスまずそうならwasmも検討
+const src = generate(screenWidth,screenHeight,centerX,centerY,ratio,iterLimit);
+
+const status = detectEdge(src);
+print(src);
+print(status.dst);
+console.log(status);
